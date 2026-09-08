@@ -93,7 +93,7 @@ button { font: inherit; color: inherit; }
 .top {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 22px 0;
-  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-top: calc(20px + env(safe-area-inset-top, 44px));
   gap: 10px;
 }
 .wordmark {
@@ -167,12 +167,12 @@ button { font: inherit; color: inherit; }
   margin: 10px 20px 8px;
   padding: 14px 16px 10px;
   border: 2.5px solid var(--ink);
-  border-radius: 28px;
+  border-radius: 22px;
   background: var(--cream);
-  box-shadow: 6px 7px 0 var(--ink);
-  transform: rotate(-.3deg);
-  transition: background .4s ease, box-shadow .25s ease;
+  filter: drop-shadow(5px 6px 0 var(--ink));
+  transition: background .4s ease;
   position: relative;
+  overflow: hidden;
 }
 [data-home-state="off"] .court-card { background: var(--cream); }
 [data-home-state="playing"] .court-card { background: #FFD0B5; }
