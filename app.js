@@ -1032,6 +1032,9 @@ async function requestEmailCode(action, email) {
       if (r.status === 429) return { ok: false, code: 'rate_limited', error: 'please wait a minute before requesting another code' };
       if (r.status >= 500 || result?.code === 'email_unavailable') return { ok: false, code: 'email_unavailable', error: 'email is temporarily unavailable — try again shortly' };
       if (result?.code === 'already_registered' && r.ok) return { ok: false, code: 'already_registered', error: 'that email is already registered — sign in instead' };
+      // Preserve the existing generic sign-in recovery contract without
+      // treating unrelated provider/network errors as evidence of a new user.
+      if (r.ok && result?.ok === false && result?.error === 'if that email exists, we sent a code') return { ok: false, code: 'signin_unconfirmed', error: result.error };
       if (!r.ok || result?.sent !== true || result?.error) return { ok: false, code: 'send_failed', error: typeof result?.error === 'string' ? result.error : 'could not confirm the email was sent — try again' };
       return { ok: true };
     })()]);
@@ -4233,7 +4236,7 @@ function showSetupEmail(prefillEmail) {
       btn.textContent = 'send me a code'; btn.disabled = false;
       error.textContent = res.error;
       // An unavailable delivery service is not evidence of a missing account.
-      nudge.hidden = true;
+      nudge.hidden = res.code !== 'signin_unconfirmed';
       return;
     }
     nudge.hidden = true;
