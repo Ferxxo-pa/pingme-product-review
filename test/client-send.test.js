@@ -19,6 +19,7 @@ for(const fn of ['signInSendCode','signupSendCode']) {
     ['structured unavailable',200,{code:'email_unavailable'},'email_unavailable'],
     ['cooldown',429,{},'rate_limited'],
     ['existing identity',200,{code:'already_registered'},'already_registered'],
+    ['legacy generic sign-in recovery',200,{ok:false,error:'if that email exists, we sent a code'},'signin_unconfirmed'],
     ['contradictory response',200,{sent:true,error:'bad'},'send_failed']
   ]) test(fn+': '+name,async()=>{
     const context=app(async()=>({status,ok:status<400,json:async()=>body}));
